@@ -15,3 +15,4 @@ class Application:
         while not self.window.should_close():
             # Main loop here
             self.window.swap_buffers()
+        self.window.terminate()

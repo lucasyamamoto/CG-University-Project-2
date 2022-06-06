@@ -29,6 +29,6 @@ class Window:
         """Swap window buffers"""
         glfw.swap_buffers(self._window)
 
-    def __del__(self):
+    def terminate(self):
         """Clean-up window before exiting"""
         glfw.terminate()
