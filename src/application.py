@@ -21,6 +21,7 @@ class Application:
         self.window.set_cursor_pos(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
         self.house = Object3D(self.graphics, "Casa", "assets/casa.obj", "assets/casa.jpg")
+        self.box = Object3D(self.graphics, "Caixa", "assets/caixa.obj", "assets/caixa.jpg")
         # Initialize application here
 
     def run(self):
@@ -32,6 +33,7 @@ class Application:
             self.graphics.clear_screen()
 
             self.graphics.draw_object(self.house.id, self.house.start_vertex, self.house.end_vertex)
+            self.graphics.draw_object(self.box.id, self.box.start_vertex, self.box.end_vertex)
 
             self.graphics.update_camera()
             self.graphics.upload_data()

@@ -54,7 +54,7 @@ class Input:
         if key == 68 and (action==1 or action==2): # tecla D
             self.camera.pos += glm.normalize(glm.cross(self.camera.front, self.camera.up)) * cameraSpeed
 
-        print("Camera pos", self.camera.pos)
+        # print("Camera pos", self.camera.pos)
             
         # if key == 80 and action==1 and polygonal_mode==True:
         #     polygonal_mode=False
