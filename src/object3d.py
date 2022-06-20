@@ -1,5 +1,3 @@
-from graphics import Graphics
-
 class Object3D:
     def __init__(self, gfx, name, model_file, texture_file):
         self.id = gfx.get_object_id()

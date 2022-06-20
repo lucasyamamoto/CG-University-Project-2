@@ -1,16 +1,12 @@
 from OpenGL.GL import *
-import glm
 import numpy as np
 from PIL import Image
-
-# soh pra testar
-from camera import model, view, projection
 
 TEXTURES_AMOUNT = 10
 BUFFER_AMOUNT = 2
 
 class Graphics:
-    def __init__(self):
+    def __init__(self, camera):
         self.vertex_code = """
                 attribute vec3 position;
                 attribute vec2 texture_coord;
@@ -40,6 +36,7 @@ class Graphics:
         self.vertices = []
         self.textures_coord = []
         self.objects_amount = -1
+        self.camera = camera
 
         # Request a program and shader slots from GPU
         self.program  = glCreateProgram()
@@ -187,29 +184,43 @@ class Graphics:
 
     def clear_screen(self):
         """Clears the screen"""
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glClearColor(1.0, 1.0, 1.0, 1.0)
 
 
     def draw_object(self, id, start_vertex, end_vertex):
         """Draws a object"""
+        if self.camera is None: return
+
         glBindTexture(GL_TEXTURE_2D, id)
 
-        mat_model = model(0, 0, 0, 0, 0, 0, 0, 1, 1, 1)
+        # rotacao
+        angle = 0.0;
+        r_x = 0.0; r_y = 0.0; r_z = 1.0;
+        
+        # translacao
+        t_x = 0.0; t_y = -1.0; t_z = 0.0;
+        
+        # escala
+        s_x = 1.0; s_y = 1.0; s_z = 1.0;
+        
+        mat_model = self.camera.model(angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z)
         loc_model = glGetUniformLocation(self.program, "model")
         glUniformMatrix4fv(loc_model, 1, GL_TRUE, mat_model)
         glBindTexture(GL_TEXTURE_2D, id)
         glDrawArrays(GL_TRIANGLES, start_vertex, end_vertex-start_vertex)
 
 
-    def set_camera(self):
-        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL)
+    def update_camera(self):
+        """Updates the camera"""
+        if self.camera is None: return
 
-        mat_view = view()
+        mat_view = self.camera.view()
         loc_view = glGetUniformLocation(self.program, "view")
         glUniformMatrix4fv(loc_view, 1, GL_TRUE, mat_view)
 
-        mat_projection = projection()
+        mat_projection = self.camera.projection()
         loc_projection = glGetUniformLocation(self.program, "projection")
         glUniformMatrix4fv(loc_projection, 1, GL_TRUE, mat_projection)    
 
