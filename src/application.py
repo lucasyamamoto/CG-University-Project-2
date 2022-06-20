@@ -30,8 +30,11 @@ class Application:
             self.window.poll_events()
 
             self.graphics.clear_screen()
+
             self.graphics.draw_object(self.house.id, self.house.start_vertex, self.house.end_vertex)
+
             self.graphics.update_camera()
+            self.graphics.upload_data()
 
             self.window.swap_buffers()
         self.window.terminate()

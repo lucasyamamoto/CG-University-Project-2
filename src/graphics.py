@@ -171,8 +171,8 @@ class Graphics:
         glEnableVertexAttribArray(loc_vertices)
         glVertexAttribPointer(loc_vertices, 3, GL_FLOAT, False, stride, offset)
 
-        textures = np.zeros(len(self.textures), [("position", np.float32, 2)])
-        textures['position'] = self.textures
+        textures = np.zeros(len(self.textures_coord), [("position", np.float32, 2)])
+        textures['position'] = self.textures_coord
         glBindBuffer(GL_ARRAY_BUFFER, self.buffers[1])
         glBufferData(GL_ARRAY_BUFFER, textures.nbytes, textures, GL_STATIC_DRAW)
         stride = textures.strides[0]
@@ -193,10 +193,8 @@ class Graphics:
         """Draws a object"""
         if self.camera is None: return
 
-        glBindTexture(GL_TEXTURE_2D, id)
-
         # rotacao
-        angle = 0.0;
+        angle = 1.0;
         r_x = 0.0; r_y = 0.0; r_z = 1.0;
         
         # translacao
@@ -223,4 +221,3 @@ class Graphics:
         mat_projection = self.camera.projection()
         loc_projection = glGetUniformLocation(self.program, "projection")
         glUniformMatrix4fv(loc_projection, 1, GL_TRUE, mat_projection)    
-
