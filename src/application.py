@@ -24,7 +24,7 @@ class Application:
         self.window.set_cursor_pos(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
         #self.house = Object3D(self.graphics, "Casa", "assets/casa.obj", "assets/casa.jpg")
-        self.box = Object3D(self.graphics, "Caixa", "assets/caixa.obj", "assets/caixa.jpg")
+        self.cat = Object3D(self.graphics, "Cat", "assets/cat/cat.obj", "assets/cat/Cat_bump.jpg")
         #self.house = Object3D(self.graphics, "Casa", "assets/casa2.obj", "assets/casa2.png")
 
     def run(self):
@@ -37,7 +37,7 @@ class Application:
             self.graphics.clear_screen()
 
             #self.graphics.draw_object(self.house.id, self.house.start_vertex, self.house.end_vertex)
-            self.graphics.draw_object(self.box.id, self.box.start_vertex, self.box.end_vertex, Transform(angle=self.frame))
+            self.graphics.draw_object(self.cat.id, self.cat.start_vertex, self.cat.end_vertex, Transform(angle=self.frame*5))
             #self.graphics.draw_object(self.house.id, self.house.start_vertex, self.house.end_vertex, self.house.transform)
 
 
