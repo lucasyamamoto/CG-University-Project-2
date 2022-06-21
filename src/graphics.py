@@ -3,14 +3,18 @@ import numpy as np
 from PIL import Image
 
 TEXTURES_AMOUNT = 10
-BUFFER_AMOUNT = 2
+BUFFER_AMOUNT = 3
 
 class Graphics:
     def __init__(self, camera):
         self.vertex_code = """
                 attribute vec3 position;
                 attribute vec2 texture_coord;
+                attribute vec3 normals;
+       
                 varying vec2 out_texture;
+                varying vec3 out_fragPos;
+                varying vec3 out_normal;
                         
                 uniform mat4 model;
                 uniform mat4 view;
@@ -19,22 +23,56 @@ class Graphics:
                 void main(){
                     gl_Position = projection * view * model * vec4(position,1.0);
                     out_texture = vec2(texture_coord);
+                    out_fragPos = vec3(model * vec4(position, 1.0));
+                    out_normal = vec3(model * vec4(normals, 1.0));
                 }
                 """
 
         self.fragment_code = """
-                uniform vec4 color;
+                uniform vec3 lightPos;
+                vec3 lightColor = vec3(1.0, 1.0, 1.0);
+        
+                // Ambient lighting parameter
+                uniform float ka;
+
+                // Diffused lighting parameter
+                uniform float kd;
+        
+                // Specular lighting parameters
+                uniform vec3 viewPos;
+                uniform float ks;
+                uniform float ns;
+
                 varying vec2 out_texture;
+                varying vec3 out_normal;
+                varying vec3 out_fragPos;
+                
                 uniform sampler2D samplerTexture;
                 
                 void main(){
+                    // Ambient reflection
+                    vec3 ambient = ka * lightColor;
+                    
+                    // Diffused reflection
+                    vec3 norm = normalize(out_normal); // normaliza vetores perpendiculares
+                    vec3 lightDir = normalize(lightPos - out_fragPos); // direcao da luz
+                    float diff = max(dot(norm, lightDir), 0.0); // verifica limite angular (entre 0 e 90)
+                    vec3 diffuse = kd * diff * lightColor; // iluminacao difusa
+                    
+                    // Specular reflection
+                    vec3 viewDir = normalize(viewPos - out_fragPos); // direcao do observador/camera
+                    vec3 reflectDir = normalize(reflect(-lightDir, norm)); // direcao da reflexao
+                    float spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
+                    vec3 specular = ks * spec * lightColor;
+                    
                     vec4 texture = texture2D(samplerTexture, out_texture);
-                    gl_FragColor = texture;
+                    gl_FragColor = vec4((ambient + diffuse + specular), 1.0) * texture;
                 }
                 """
 
         self.vertices = []
         self.textures_coord = []
+        self.normals = []
         self.objects_amount = -1
         self.camera = camera
 
@@ -89,6 +127,7 @@ class Graphics:
     def load_model_from_file(self, filename):
         """Loads a Wavefront OBJ file. """
         vertices = []
+        normals = []
         texture_coords = []
         faces = []
 
@@ -104,6 +143,10 @@ class Graphics:
             if values[0] == 'v':
                 vertices.append(values[1:4])
 
+            # Get vertices normals
+            if values[0] == 'vn':
+                normals.append(values[1:4])
+
             # Get texture coordinates
             elif values[0] == 'vt':
                 texture_coords.append(values[1:3])
@@ -114,35 +157,41 @@ class Graphics:
             elif values[0] == 'f':
                 face = []
                 face_texture = []
+                face_normals = []
                 for v in values[1:]:
                     w = v.split('/')
                     face.append(int(w[0]))
+                    face_normals.append(int(w[2]))
                     if len(w) >= 2 and len(w[1]) > 0:
                         face_texture.append(int(w[1]))
+                        #if len(w) >= 3 and len(w[2]) > 0:
+                        #    face_normals.append(int(w[2]))
+                        #else:
+                        #    face_normals.append(0)
                     else:
                         face_texture.append(0)
 
-                faces.append((face, face_texture, material))
+                faces.append((face, face_texture, face_normals, material))
 
         model = {}
         model['vertices'] = vertices
         model['texture'] = texture_coords
         model['faces'] = faces
+        model['normals'] = normals
 
         return model
 
-    def load_texture_from_file(self, texture_id, img_textura):
+    def load_texture_from_file(self, texture_id, img_texture):
         """Loads a texture from a image file. """
         glBindTexture(GL_TEXTURE_2D, texture_id)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        img = Image.open(img_textura)
+        img = Image.open(img_texture)
         img_width = img.size[0]
         img_height = img.size[1]
         image_data = img.tobytes("raw", "RGB", 0, -1)
-        #image_data = np.array(list(img.getdata()), np.uint8)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data)
 
 
@@ -151,10 +200,11 @@ class Graphics:
         start_vertex = len(self.vertices)
         for face in model['faces']:
             for vertice_id in face[0]:
-                self.vertices.append(model['vertices'][vertice_id-1] )
+                self.vertices.append(model['vertices'][vertice_id-1])
             for texture_id in face[1]:
-                self.textures_coord.append(model['texture'][texture_id-1] )
-                
+                self.textures_coord.append(model['texture'][texture_id-1])
+            for normal_id in face[2]:
+                self.normals.append(model['normals'][normal_id-1])
         end_vertex = len(self.vertices)
         return start_vertex, end_vertex
 
@@ -181,6 +231,17 @@ class Graphics:
         glEnableVertexAttribArray(loc_texture_coord)
         glVertexAttribPointer(loc_texture_coord, 2, GL_FLOAT, False, stride, offset)
 
+        normals = np.zeros(len(self.normals), [("position", np.float32, 3)])
+        normals['position'] = self.normals
+        
+        glBindBuffer(GL_ARRAY_BUFFER, self.buffers[2])
+        glBufferData(GL_ARRAY_BUFFER, normals.nbytes, normals, GL_STATIC_DRAW)
+        stride = normals.strides[0]
+        offset = ctypes.c_void_p(0)
+        loc_normals_coord = glGetAttribLocation(self.program, "normals")
+        glEnableVertexAttribArray(loc_normals_coord)
+        glVertexAttribPointer(loc_normals_coord, 3, GL_FLOAT, False, stride, offset)
+
 
     def clear_screen(self):
         """Clears the screen"""
@@ -202,6 +263,24 @@ class Graphics:
         
         # escala
         s_x = 1.0; s_y = 1.0; s_z = 1.0;
+
+        # Illumination parameters
+        ka = 0.1
+        kd = 0.1
+        ks = 0.9
+        ns = 32
+    
+        loc_ka = glGetUniformLocation(self.program, "ka")
+        glUniform1f(loc_ka, ka)
+    
+        loc_kd = glGetUniformLocation(self.program, "kd")
+        glUniform1f(loc_kd, kd)
+    
+        loc_ks = glGetUniformLocation(self.program, "ks")
+        glUniform1f(loc_ks, ks)
+    
+        loc_ns = glGetUniformLocation(self.program, "ns")
+        glUniform1f(loc_ns, ns)
         
         mat_model = self.camera.model(angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z)
         loc_model = glGetUniformLocation(self.program, "model")
