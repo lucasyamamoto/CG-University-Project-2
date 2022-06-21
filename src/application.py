@@ -22,6 +22,7 @@ class Application:
 
         #self.house = Object3D(self.graphics, "Casa", "assets/casa.obj", "assets/casa.jpg")
         self.box = Object3D(self.graphics, "Caixa", "assets/caixa.obj", "assets/caixa.jpg")
+        #self.house = Object3D(self.graphics, "Casa", "assets/casa2.obj", "assets/casa2.png")
 
     def run(self):
         """Run main loop"""
@@ -33,6 +34,7 @@ class Application:
 
             #self.graphics.draw_object(self.house.id, self.house.start_vertex, self.house.end_vertex)
             self.graphics.draw_object(self.box.id, self.box.start_vertex, self.box.end_vertex, self.box.transform)
+            #self.graphics.draw_object(self.house.id, self.house.start_vertex, self.house.end_vertex, self.house.transform)
 
             self.graphics.update_camera()
             self.graphics.upload_data()
