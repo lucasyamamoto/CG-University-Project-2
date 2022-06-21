@@ -11,11 +11,19 @@ class Window:
     
     def set_key_callback(self, callback):
         """Set key input callback"""
-        glfw.set_key_callback(callback)
+        glfw.set_key_callback(self._window, callback)
     
     def set_mouse_callback(self, callback):
         """Set mouse input callback"""
-        glfw.set_cursor_pos_callback(callback)
+        glfw.set_cursor_pos_callback(self._window, callback)
+
+    def set_cursor_pos(self, x, y):
+        """Set cursor position"""
+        glfw.set_cursor_pos(self._window, x, y)
+
+    def poll_events(self):
+        """Poll events"""
+        glfw.poll_events()
     
     def get(self):
         """Get GLFW window"""
