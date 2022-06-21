@@ -1,6 +1,7 @@
 from OpenGL.GL import *
 import numpy as np
 from PIL import Image
+from transform import Transform
 
 TEXTURES_AMOUNT = 10
 BUFFER_AMOUNT = 3
@@ -24,12 +25,13 @@ class Graphics:
                     gl_Position = projection * view * model * vec4(position,1.0);
                     out_texture = vec2(texture_coord);
                     out_fragPos = vec3(model * vec4(position, 1.0));
-                    out_normal = vec3(model * vec4(normals, 1.0));
+                    out_normal = normals;
                 }
                 """
 
         self.fragment_code = """
-                uniform vec3 lightPos;
+                //uniform vec3 lightPos;
+                vec3 lightPos = vec3(1.0, 1.0, 1.0);
                 vec3 lightColor = vec3(1.0, 1.0, 1.0);
         
                 // Ambient lighting parameter
@@ -54,14 +56,14 @@ class Graphics:
                     vec3 ambient = ka * lightColor;
                     
                     // Diffused reflection
-                    vec3 norm = normalize(out_normal); // normaliza vetores perpendiculares
-                    vec3 lightDir = normalize(lightPos - out_fragPos); // direcao da luz
-                    float diff = max(dot(norm, lightDir), 0.0); // verifica limite angular (entre 0 e 90)
-                    vec3 diffuse = kd * diff * lightColor; // iluminacao difusa
+                    vec3 norm = normalize(out_normal);
+                    vec3 lightDir = normalize(lightPos - out_fragPos);
+                    float diff = max(dot(norm, lightDir), 0.0);
+                    vec3 diffuse = kd * diff * lightColor;
                     
                     // Specular reflection
-                    vec3 viewDir = normalize(viewPos - out_fragPos); // direcao do observador/camera
-                    vec3 reflectDir = normalize(reflect(-lightDir, norm)); // direcao da reflexao
+                    vec3 viewDir = normalize(viewPos - out_fragPos);
+                    vec3 reflectDir = normalize(reflect(-lightDir, norm));
                     float spec = pow(max(dot(viewDir, reflectDir), 0.0), ns);
                     vec3 specular = ks * spec * lightColor;
                     
@@ -164,10 +166,6 @@ class Graphics:
                     face_normals.append(int(w[2]))
                     if len(w) >= 2 and len(w[1]) > 0:
                         face_texture.append(int(w[1]))
-                        #if len(w) >= 3 and len(w[2]) > 0:
-                        #    face_normals.append(int(w[2]))
-                        #else:
-                        #    face_normals.append(0)
                     else:
                         face_texture.append(0)
 
@@ -250,19 +248,19 @@ class Graphics:
         glClearColor(1.0, 1.0, 1.0, 1.0)
 
 
-    def draw_object(self, id, start_vertex, end_vertex):
+    def draw_object(self, id, start_vertex, end_vertex, transform=Transform()):
         """Draws a object"""
         if self.camera is None: return
 
         # rotacao
         angle = 1.0;
-        r_x = 0.0; r_y = 0.0; r_z = 1.0;
+        r_x = transform.r.x; r_y = transform.r.y; r_z = transform.r.z;
         
         # translacao
-        t_x = 0.0; t_y = -1.0; t_z = 0.0;
+        t_x = transform.t.x; t_y = transform.t.y; t_z = transform.t.z;
         
         # escala
-        s_x = 1.0; s_y = 1.0; s_z = 1.0;
+        s_x = transform.s.x; s_y = transform.s.y; s_z = transform.s.z;
 
         # Illumination parameters
         ka = 0.1
