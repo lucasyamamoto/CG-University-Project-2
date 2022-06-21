@@ -253,7 +253,7 @@ class Graphics:
         if self.camera is None: return
 
         # rotacao
-        angle = 1.0;
+        angle = transform.a
         r_x = transform.r.x; r_y = transform.r.y; r_z = transform.r.z;
         
         # translacao

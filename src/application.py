@@ -3,6 +3,8 @@ from input import Input
 from camera import Camera
 from graphics import Graphics
 from object3d import Object3D
+from transform import Transform
+from glm import vec3
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -15,6 +17,7 @@ class Application:
         self.camera = Camera(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.input = Input(self.camera, WINDOW_WIDTH, WINDOW_HEIGHT)
         self.graphics = Graphics(self.camera)
+        self.frame = 0
 
         self.window.set_mouse_callback(self.input.mouse_event)
         self.window.set_key_callback(self.input.key_event)
@@ -28,13 +31,15 @@ class Application:
         """Run main loop"""
         while not self.window.should_close():
             # Main loop here
+            self.frame += 1
             self.window.poll_events()
 
             self.graphics.clear_screen()
 
             #self.graphics.draw_object(self.house.id, self.house.start_vertex, self.house.end_vertex)
-            self.graphics.draw_object(self.box.id, self.box.start_vertex, self.box.end_vertex, self.box.transform)
+            self.graphics.draw_object(self.box.id, self.box.start_vertex, self.box.end_vertex, Transform(angle=self.frame))
             #self.graphics.draw_object(self.house.id, self.house.start_vertex, self.house.end_vertex, self.house.transform)
+
 
             self.graphics.update_camera()
             self.graphics.upload_data()
