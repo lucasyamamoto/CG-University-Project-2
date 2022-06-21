@@ -1,6 +1,7 @@
 from OpenGL.GL import *
 import numpy as np
 from PIL import Image
+from transform import Transform
 
 TEXTURES_AMOUNT = 10
 BUFFER_AMOUNT = 3
@@ -164,10 +165,6 @@ class Graphics:
                     face_normals.append(int(w[2]))
                     if len(w) >= 2 and len(w[1]) > 0:
                         face_texture.append(int(w[1]))
-                        #if len(w) >= 3 and len(w[2]) > 0:
-                        #    face_normals.append(int(w[2]))
-                        #else:
-                        #    face_normals.append(0)
                     else:
                         face_texture.append(0)
 
@@ -250,19 +247,19 @@ class Graphics:
         glClearColor(1.0, 1.0, 1.0, 1.0)
 
 
-    def draw_object(self, id, start_vertex, end_vertex):
+    def draw_object(self, id, start_vertex, end_vertex, transform=Transform()):
         """Draws a object"""
         if self.camera is None: return
 
         # rotacao
         angle = 1.0;
-        r_x = 0.0; r_y = 0.0; r_z = 1.0;
+        r_x = transform.r.x; r_y = transform.r.y; r_z = transform.r.z;
         
         # translacao
-        t_x = 0.0; t_y = -1.0; t_z = 0.0;
+        t_x = transform.t.x; t_y = transform.t.y; t_z = transform.t.z;
         
         # escala
-        s_x = 1.0; s_y = 1.0; s_z = 1.0;
+        s_x = transform.s.x; s_y = transform.s.y; s_z = transform.s.z;
 
         # Illumination parameters
         ka = 0.1
