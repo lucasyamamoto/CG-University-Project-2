@@ -248,7 +248,8 @@ class Graphics:
         glClearColor(0, 0, 0, 1.0)
 
 
-    def draw_object(self, id, start_vertex, end_vertex, transform=Transform()):
+    # def draw_object(self, id, start_vertex, end_vertex, transform=Transform()):
+    def draw_object(self, obj3d, transform=Transform()):
         """Draws a object"""
         if self.camera is None: return
 
@@ -283,8 +284,8 @@ class Graphics:
         mat_model = self.camera.model(angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z)
         loc_model = glGetUniformLocation(self.program, "model")
         glUniformMatrix4fv(loc_model, 1, GL_TRUE, mat_model)
-        glBindTexture(GL_TEXTURE_2D, id)
-        glDrawArrays(GL_TRIANGLES, start_vertex, end_vertex-start_vertex)
+        glBindTexture(GL_TEXTURE_2D, obj3d.id)
+        glDrawArrays(GL_TRIANGLES, obj3d.start_vertex, obj3d.end_vertex - obj3d.start_vertex)
 
 
     def update_camera(self):
