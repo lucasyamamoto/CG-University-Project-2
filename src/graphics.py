@@ -1,9 +1,9 @@
-from OpenGL.GL import *
+from OpenGL.GL import * # type: ignore
 import numpy as np
 from PIL import Image
 from transform import Transform
 
-TEXTURES_AMOUNT = 10
+TEXTURES_AMOUNT = 30
 BUFFER_AMOUNT = 3
 
 class Graphics:
@@ -244,8 +244,8 @@ class Graphics:
     def clear_screen(self):
         """Clears the screen"""
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glClearColor(1.0, 1.0, 1.0, 1.0)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # type: ignore
+        glClearColor(0, 0, 0, 1.0)
 
 
     def draw_object(self, id, start_vertex, end_vertex, transform=Transform()):

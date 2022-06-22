@@ -6,8 +6,8 @@ class Camera:
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.pos   = glm.vec3(0.0,  0.0,  1.0);
-        self.front = glm.vec3(0.0,  0.0, -1.0);
+        self.pos   = glm.vec3(-5,  10.0,  30.0);
+        self.front = glm.vec3(0.0,  0.0,  -1.0);
         self.up    = glm.vec3(0.0,  1.0,  0.0);
 
     def model(self, angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z):
