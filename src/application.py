@@ -57,6 +57,13 @@ class Application:
                 "Sky", "assets/sky/nightsky.obj", "assets/sky/nightsky.jpg", 
                 )
 
+        self.house = Object3D(self.graphics, 
+                "House", "assets/house/house.obj", "assets/house/house.jpg", 
+                Transform(
+                    translation=vec3(0, 0, 0), 
+                    scale=vec3(3, 3, 3)
+                    ))
+
     def run(self):
         """Run main loop"""
         while not self.window.should_close():
@@ -71,6 +78,7 @@ class Application:
             self.graphics.draw_object(self.moon, self.moon.transform, True)
             self.graphics.draw_object(self.floor, self.floor.transform)
             self.graphics.draw_object(self.sky, self.sky.transform)
+            self.graphics.draw_object(self.house, self.house.transform)
 
             self.graphics.update_camera()
             self.graphics.upload_data()
