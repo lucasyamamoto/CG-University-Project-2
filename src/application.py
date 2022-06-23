@@ -54,11 +54,8 @@ class Application:
                     ))
 
         self.sky = Object3D(self.graphics, 
-                "Sky", "assets/flat/flat.obj", "assets/flat/flat.jpg", 
-                Transform(
-                    translation=vec3(0, 100, 0), 
-                    scale=vec3(100, 100, 100)
-                    ))
+                "Sky", "assets/sky/nightsky.obj", "assets/sky/nightsky.jpg", 
+                )
 
     def run(self):
         """Run main loop"""
@@ -71,7 +68,7 @@ class Application:
             # Objects
             self.graphics.draw_object(self.cat, self.cat.transform)
             self.graphics.draw_object(self.person, self.person.transform)
-            self.graphics.draw_object(self.moon, self.moon.transform)
+            self.graphics.draw_object(self.moon, self.moon.transform, True)
             self.graphics.draw_object(self.floor, self.floor.transform)
             self.graphics.draw_object(self.sky, self.sky.transform)
 

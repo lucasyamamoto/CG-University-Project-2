@@ -30,8 +30,7 @@ class Graphics:
                 """
 
         self.fragment_code = """
-                //uniform vec3 lightPos;
-                vec3 lightPos = vec3(1.0, 1.0, 1.0);
+                uniform vec3 lightPos;
                 vec3 lightColor = vec3(1.0, 1.0, 1.0);
         
                 // Ambient lighting parameter
@@ -249,7 +248,7 @@ class Graphics:
 
 
     # def draw_object(self, id, start_vertex, end_vertex, transform=Transform()):
-    def draw_object(self, obj3d, transform=Transform()):
+    def draw_object(self, obj3d, transform=Transform(), light=False):
         """Draws a object"""
         if self.camera is None: return
 
@@ -264,10 +263,10 @@ class Graphics:
         s_x = transform.s.x; s_y = transform.s.y; s_z = transform.s.z;
 
         # Illumination parameters
-        ka = 0.1
-        kd = 0.1
-        ks = 0.9
-        ns = 32
+        ka = 0.3
+        kd = 1.0
+        ks = 0.1
+        ns = 0.1
     
         loc_ka = glGetUniformLocation(self.program, "ka")
         glUniform1f(loc_ka, ka)
@@ -280,6 +279,10 @@ class Graphics:
     
         loc_ns = glGetUniformLocation(self.program, "ns")
         glUniform1f(loc_ns, ns)
+
+        if light:
+            loc_light_pos = glGetUniformLocation(self.program, "lightPos")
+            glUniform3f(loc_light_pos, t_x, t_y, t_z)
         
         mat_model = self.camera.model(angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z)
         loc_model = glGetUniformLocation(self.program, "model")
