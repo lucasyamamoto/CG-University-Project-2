@@ -61,4 +61,10 @@ class Input:
         # else:
         #     if key == 80 and action==1 and polygonal_mode==False:
         #         polygonal_mode=True
-            
+
+        # Minimum height
+        if self.camera.pos.y < 1.0:
+            self.camera.pos.y = 1.0
+        # Maximum height
+        elif self.camera.pos.y > 50.0:
+            self.camera.pos.y = 50.0
