@@ -53,7 +53,14 @@ class Application:
                 "Floor", "assets/flat/flat.obj", "assets/flat/flat.jpg", 
                 Transform(
                     translation=vec3(0, 0, 0), 
-                    scale=vec3(100, 100, 100)
+                    scale=vec3(2, 2, 2)
+                    ))
+
+        self.grass = Object3D(self.graphics, 
+                "Floor", "assets/flat/grass.obj", "assets/flat/grass.jpg", 
+                Transform(
+                    translation=vec3(0, 0, 0), 
+                    scale=vec3(2, 2, 2)
                     ))
 
         self.sky = Object3D(self.graphics, 
@@ -95,6 +102,7 @@ class Application:
             self.graphics.draw_object(self.person, self.person.transform)
             self.graphics.draw_object(self.moon, self.moon.transform, True)
             self.graphics.draw_object(self.floor, self.floor.transform)
+            self.graphics.draw_object(self.grass, self.grass.transform)
             self.graphics.draw_object(self.sky, self.sky.transform)
             self.graphics.draw_object(self.house, self.house.transform)
             self.graphics.draw_object(self.car, self.car.transform)
