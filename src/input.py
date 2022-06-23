@@ -41,7 +41,7 @@ class Input:
         # print("Mouse pos", xpos, ypos)
 
     def key_event(self, window, key, scancode, action, mods):
-        cameraSpeed = 0.2
+        cameraSpeed = 1.0
         if key == 87 and (action==1 or action==2): # tecla W
             self.camera.pos += cameraSpeed * self.camera.front
         
