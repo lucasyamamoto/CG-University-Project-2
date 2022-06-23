@@ -30,14 +30,14 @@ class Application:
                     angle=270, 
                     translation=vec3(-6, 0, 5), 
                     rotation=vec3(1, 0, 0), 
-                    scale=vec3(0.1, 0.1, 0.1)
+                    scale=vec3(0.15, 0.15, 0.15)
                     ))
 
         self.person = Object3D(self.graphics, 
                 "Person", "assets/person/person.obj", "assets/person/person.jpg", 
                 Transform(
                     translation=vec3(-10, 0, 0), 
-                    scale=vec3(0.01, 0.01, 0.01)
+                    scale=vec3(0.015, 0.015, 0.015)
                     ))
 
         self.moon = Object3D(self.graphics, 
