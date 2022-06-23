@@ -5,6 +5,7 @@ from graphics import Graphics
 from object3d import Object3D
 from transform import Transform
 from glm import vec3
+import glm
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -64,6 +65,8 @@ class Application:
                     scale=vec3(3, 3, 3)
                     ))
 
+        self.moonanimation = glm.rotate(glm.mat4(1.0), 0.1, vec3(0.0, 1.0, 0.0))
+
     def run(self):
         """Run main loop"""
         while not self.window.should_close():
@@ -71,6 +74,8 @@ class Application:
             self.frame += 1
             self.window.poll_events()
             self.graphics.clear_screen()
+
+            self.moon.transform.t = vec3(self.moonanimation * glm.vec4(self.moon.transform.t, 1.0))
 
             # Objects
             self.graphics.draw_object(self.cat, self.cat.transform)
