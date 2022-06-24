@@ -20,10 +20,12 @@ class Application:
         self.graphics = Graphics(self.camera)
         self.frame = 0
 
+        # Configure input
         self.window.set_mouse_callback(self.input.mouse_event)
         self.window.set_key_callback(self.input.key_event)
         self.window.set_cursor_pos(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 
+        # Instanciate 3D models
         self.cat = Object3D(self.graphics, 
                 "Cat", "assets/cat/cat.obj", "assets/cat/Cat_diffuse.jpg", 
                 Transform(
@@ -88,16 +90,17 @@ class Application:
     def run(self):
         """Run main loop"""
         while not self.window.should_close():
-            # Main loop here
+            # Main loop
             self.frame += 1
             self.window.poll_events()
             self.graphics.clear_screen()
 
+            # Update animations
             self.moon.transform.t = vec3(self.moonanimation * glm.vec4(self.moon.transform.t, 1.0))
             self.car.transform.t = vec3(self.caranimation * glm.vec4(self.car.transform.t, 1.0))
             self.car.transform.a += 17
 
-            # Objects
+            # Draw objects
             self.graphics.draw_object(self.cat, self.cat.transform)
             self.graphics.draw_object(self.person, self.person.transform)
             self.graphics.draw_object(self.moon, self.moon.transform, True)
@@ -107,6 +110,7 @@ class Application:
             self.graphics.draw_object(self.house, self.house.transform)
             self.graphics.draw_object(self.car, self.car.transform)
 
+            # Update screen
             self.graphics.update_camera()
             self.graphics.upload_data()
             self.window.swap_buffers()

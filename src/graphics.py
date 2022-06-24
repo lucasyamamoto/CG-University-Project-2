@@ -207,7 +207,8 @@ class Graphics:
 
 
     def upload_data(self):
-        """Uploads the vertices and textures into the GPU"""
+        """Uploads the vertices, textures, and normals into the GPU"""
+        # Upload vertices
         vertices = np.zeros(len(self.vertices), [("position", np.float32, 3)])
         vertices['position'] = self.vertices
         glBindBuffer(GL_ARRAY_BUFFER, self.buffers[0])
@@ -218,6 +219,7 @@ class Graphics:
         glEnableVertexAttribArray(loc_vertices)
         glVertexAttribPointer(loc_vertices, 3, GL_FLOAT, False, stride, offset)
 
+        # Upload textures
         textures = np.zeros(len(self.textures_coord), [("position", np.float32, 2)])
         textures['position'] = self.textures_coord
         glBindBuffer(GL_ARRAY_BUFFER, self.buffers[1])
@@ -228,9 +230,9 @@ class Graphics:
         glEnableVertexAttribArray(loc_texture_coord)
         glVertexAttribPointer(loc_texture_coord, 2, GL_FLOAT, False, stride, offset)
 
+        # Upload normals
         normals = np.zeros(len(self.normals), [("position", np.float32, 3)])
         normals['position'] = self.normals
-        
         glBindBuffer(GL_ARRAY_BUFFER, self.buffers[2])
         glBufferData(GL_ARRAY_BUFFER, normals.nbytes, normals, GL_STATIC_DRAW)
         stride = normals.strides[0]
@@ -252,14 +254,16 @@ class Graphics:
         """Draws a object"""
         if self.camera is None: return
 
-        # rotacao
+        # Set rotation angle
         angle = transform.a
+
+        # Set rotation axis
         r_x = transform.r.x; r_y = transform.r.y; r_z = transform.r.z;
         
-        # translacao
+        # Set translation
         t_x = transform.t.x; t_y = transform.t.y; t_z = transform.t.z;
         
-        # escala
+        # Set scale
         s_x = transform.s.x; s_y = transform.s.y; s_z = transform.s.z;
 
         # Illumination parameters
@@ -280,10 +284,12 @@ class Graphics:
         loc_ns = glGetUniformLocation(self.program, "ns")
         glUniform1f(loc_ns, ns)
 
+        # Set light source position
         if light:
             loc_light_pos = glGetUniformLocation(self.program, "lightPos")
             glUniform3f(loc_light_pos, t_x, t_y, t_z)
         
+        # Upload model matrix and draw object
         mat_model = self.camera.model(angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z)
         loc_model = glGetUniformLocation(self.program, "model")
         glUniformMatrix4fv(loc_model, 1, GL_TRUE, mat_model)
@@ -295,10 +301,12 @@ class Graphics:
         """Updates the camera"""
         if self.camera is None: return
 
+        # Upload view matrix
         mat_view = self.camera.view()
         loc_view = glGetUniformLocation(self.program, "view")
         glUniformMatrix4fv(loc_view, 1, GL_TRUE, mat_view)
 
+        # Upload projection matrix
         mat_projection = self.camera.projection()
         loc_projection = glGetUniformLocation(self.program, "projection")
         glUniformMatrix4fv(loc_projection, 1, GL_TRUE, mat_projection)    
