@@ -7,8 +7,8 @@ from transform import Transform
 from glm import vec3
 import glm
 
-WINDOW_WIDTH = 1000
-WINDOW_HEIGHT = 1000
+WINDOW_WIDTH = 1280
+WINDOW_HEIGHT = 720
 WINDOW_NAME = "Application"
 
 class Application:
@@ -98,7 +98,9 @@ class Application:
             # Update animations
             self.moon.transform.t = vec3(self.moonanimation * glm.vec4(self.moon.transform.t, 1.0))
             self.car.transform.t = vec3(self.caranimation * glm.vec4(self.car.transform.t, 1.0))
-            self.car.transform.a += 17
+            self.car.transform.a = glm.degrees(glm.atan(self.car.transform.t.x/self.car.transform.t.z))
+            if self.car.transform.t.z > 0.0:
+                self.car.transform.a += 180.0
 
             # Draw objects
             self.graphics.draw_object(self.cat, self.cat.transform)
