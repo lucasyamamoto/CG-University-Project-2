@@ -9,6 +9,7 @@ class Camera:
         self.pos   = glm.vec3(-5,  10.0,  30.0);
         self.front = glm.vec3(0.0,  0.0,  -1.0);
         self.up    = glm.vec3(0.0,  1.0,  0.0);
+        self.fov = 45.0
 
     def model(self, angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z):
         angle = math.radians(angle)
@@ -35,9 +36,6 @@ class Camera:
 
     def projection(self):
         # perspective parameters: fovy, aspect, near, far
-
-        # lembrar de mudar
-        mat_projection = glm.perspective(glm.radians(45.0), self.width/self.height, 0.1, 1000.0)
-
+        mat_projection = glm.perspective(glm.radians(self.fov), self.width/self.height, 0.1, 1000.0)
         mat_projection = np.array(mat_projection)    
         return mat_projection

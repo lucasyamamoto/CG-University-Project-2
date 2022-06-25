@@ -59,6 +59,13 @@ class Input:
         if key == glfw.KEY_D and (action==glfw.PRESS or action==glfw.REPEAT): # tecla D
             self.camera.pos += glm.normalize(glm.cross(self.camera.front, self.camera.up)) * cameraSpeed
 
+        if key == glfw.KEY_Q and (action==glfw.PRESS or action==glfw.REPEAT): # tecla Q
+            self.camera.fov += 1
+
+        if key == glfw.KEY_E and (action==glfw.PRESS or action==glfw.REPEAT): # tecla E
+            self.camera.fov -= 1
+
+
         # print("Camera pos", self.camera.pos)
             
         # if key == 80 and action==1 and polygonal_mode==True:
