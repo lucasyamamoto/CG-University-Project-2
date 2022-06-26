@@ -6,7 +6,7 @@ class Camera:
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.pos   = glm.vec3(-5,  10.0,  30.0);
+        self.pos   = glm.vec3(-150,  50.0,  -150.0);
         self.front = glm.vec3(0.0,  0.0,  -1.0);
         self.up    = glm.vec3(0.0,  1.0,  0.0);
         self.fov = 45.0
