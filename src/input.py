@@ -82,11 +82,11 @@ class Input:
             self.camera.pos.y = 50.0
 
         # Define x and z limits
-        if self.camera.pos.x < -120.0:
-            self.camera.pos.x = -120.0
-        elif self.camera.pos.x > 120.0:
-            self.camera.pos.x = 120.0
-        if self.camera.pos.z < -120.0:
-            self.camera.pos.z = -120.0
-        elif self.camera.pos.z > 120.0:
-            self.camera.pos.z = 120.0
+        if self.camera.pos.x < -150.0:
+            self.camera.pos.x = -150.0
+        elif self.camera.pos.x > 150.0:
+            self.camera.pos.x = 150.0
+        if self.camera.pos.z < -150.0:
+            self.camera.pos.z = -150.0
+        elif self.camera.pos.z > 150.0:
+            self.camera.pos.z = 150.0

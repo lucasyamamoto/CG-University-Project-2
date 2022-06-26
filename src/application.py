@@ -94,6 +94,24 @@ class Application:
 
         self.caranimation = glm.rotate(glm.mat4(1.0), 0.3, vec3(0.0, 1.0, 0.0))
 
+        self.stop = Object3D(self.graphics, 
+                "Stop", "assets/stop/stop.obj", "assets/stop/stop.png", 
+                Transform(
+                    translation=vec3(-130, 0, 0), 
+                    angle=90,
+                    rotation=vec3(0, 1, 0),
+                    scale=vec3(7, 7, 7)
+                    ))
+
+        self.deer = Object3D(self.graphics, 
+                "Deer", "assets/deer/deer.obj", "assets/deer/deer.jpg", 
+                Transform(
+                    translation=vec3(-135, 0, -15), 
+                    angle=270,
+                    rotation=vec3(1, 0, 0), 
+                    scale=vec3(0.3, 0.3, 0.3)
+                    ))
+
     def run(self):
         """Run main loop"""
         while not self.window.should_close():
@@ -119,6 +137,8 @@ class Application:
             self.graphics.draw_object(self.sky, self.sky.transform)
             self.graphics.draw_object(self.house, self.house.transform)
             self.graphics.draw_object(self.car, self.car.transform)
+            self.graphics.draw_object(self.stop, self.stop.transform)
+            self.graphics.draw_object(self.deer, self.deer.transform)
 
             # Update screen
             self.graphics.update_camera()
