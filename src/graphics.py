@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 from transform import Transform
 
-TEXTURES_AMOUNT = 30
+TEXTURES_AMOUNT = 35
 BUFFER_AMOUNT = 3
 
 class Graphics:

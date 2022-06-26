@@ -112,6 +112,15 @@ class Application:
                     scale=vec3(0.3, 0.3, 0.3)
                     ))
 
+        self.hat = Object3D(self.graphics, 
+                "hat", "assets/hat/hat.obj", "assets/hat/hat.jpg", 
+                Transform(
+                    angle=270,
+                    rotation=vec3(1, 0, 0), 
+                    translation=vec3(-4, 5.2, 8.4), 
+                    scale=vec3(0.05, 0.05, 0.05)
+                    ))
+
     def run(self):
         """Run main loop"""
         while not self.window.should_close():
@@ -139,6 +148,7 @@ class Application:
             self.graphics.draw_object(self.car, self.car.transform)
             self.graphics.draw_object(self.stop, self.stop.transform)
             self.graphics.draw_object(self.deer, self.deer.transform)
+            self.graphics.draw_object(self.hat, self.hat.transform)
 
             # Update screen
             self.graphics.update_camera()
