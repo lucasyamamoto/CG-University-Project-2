@@ -30,7 +30,7 @@ class Application:
                 "Cat", "assets/cat/cat.obj", "assets/cat/Cat_diffuse.jpg", 
                 Transform(
                     angle=270, 
-                    translation=vec3(-6, 0, 5), 
+                    translation=vec3(-4, 0, 6), 
                     rotation=vec3(1, 0, 0), 
                     scale=vec3(0.15, 0.15, 0.15)
                     ))
@@ -38,8 +38,15 @@ class Application:
         self.person = Object3D(self.graphics, 
                 "Person", "assets/person/person.obj", "assets/person/person.jpg", 
                 Transform(
-                    translation=vec3(-10, 0, 0), 
+                    translation=vec3(-10, 1.5, 0), 
                     scale=vec3(0.015, 0.015, 0.015)
+                    ))
+
+        self.chair = Object3D(self.graphics, 
+                "Chair", "assets/chair/chair.obj", "assets/chair/chair.png", 
+                Transform(
+                    translation=vec3(-10, 0, 0), 
+                    scale=vec3(20, 20, 20)
                     ))
 
         self.moon = Object3D(self.graphics, 
@@ -72,7 +79,7 @@ class Application:
         self.house = Object3D(self.graphics, 
                 "House", "assets/house/house.obj", "assets/house/house.jpg", 
                 Transform(
-                    translation=vec3(0, 0, 0), 
+                    translation=vec3(0, 0, -10), 
                     scale=vec3(3, 3, 3)
                     ))
 
@@ -105,6 +112,7 @@ class Application:
             # Draw objects
             self.graphics.draw_object(self.cat, self.cat.transform)
             self.graphics.draw_object(self.person, self.person.transform)
+            self.graphics.draw_object(self.chair, self.chair.transform)
             self.graphics.draw_object(self.moon, self.moon.transform, True)
             self.graphics.draw_object(self.floor, self.floor.transform)
             self.graphics.draw_object(self.grass, self.grass.transform)
