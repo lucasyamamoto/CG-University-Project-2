@@ -113,13 +113,23 @@ class Application:
                     ))
 
         self.hat = Object3D(self.graphics, 
-                "hat", "assets/hat/hat.obj", "assets/hat/hat.jpg", 
+                "Hat", "assets/hat/hat.obj", "assets/hat/hat.jpg", 
                 Transform(
                     angle=270,
                     rotation=vec3(1, 0, 0), 
                     translation=vec3(-4, 5.2, 8.4), 
                     scale=vec3(0.05, 0.05, 0.05)
                     ))
+
+        self.shotgun = Object3D(self.graphics, 
+                "shotgun", "assets/shotgun/shotgun.obj", "assets/shotgun/shotgun.png", 
+                Transform(
+                    angle=180,
+                    rotation=vec3(0, 1, 0), 
+                    translation=vec3(-134, 6.5, -16.8), 
+                    scale=vec3(0.8, 0.8, 0.8)
+                    ))
+
 
     def run(self):
         """Run main loop"""
@@ -149,6 +159,7 @@ class Application:
             self.graphics.draw_object(self.stop, self.stop.transform)
             self.graphics.draw_object(self.deer, self.deer.transform)
             self.graphics.draw_object(self.hat, self.hat.transform)
+            self.graphics.draw_object(self.shotgun, self.shotgun.transform)
 
             # Update screen
             self.graphics.update_camera()
