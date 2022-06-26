@@ -122,12 +122,21 @@ class Application:
                     ))
 
         self.shotgun = Object3D(self.graphics, 
-                "shotgun", "assets/shotgun/shotgun.obj", "assets/shotgun/shotgun.png", 
+                "Shotgun", "assets/shotgun/shotgun.obj", "assets/shotgun/shotgun.png", 
                 Transform(
                     angle=180,
                     rotation=vec3(0, 1, 0), 
                     translation=vec3(-134, 6.5, -16.8), 
                     scale=vec3(0.8, 0.8, 0.8)
+                    ))
+
+        self.cactus = Object3D(self.graphics, 
+                "Cactus", "assets/cactus/cactus.obj", "assets/cactus/cactus.jpg", 
+                Transform(
+                    angle=270,
+                    rotation=vec3(1, 0, 0), 
+                    translation=vec3(134, 0, -16.8), 
+                    scale=vec3(0.2, 0.2, 0.2)
                     ))
 
 
@@ -160,6 +169,7 @@ class Application:
             self.graphics.draw_object(self.deer, self.deer.transform)
             self.graphics.draw_object(self.hat, self.hat.transform)
             self.graphics.draw_object(self.shotgun, self.shotgun.transform)
+            self.graphics.draw_object(self.cactus, self.cactus.transform)
 
             # Update screen
             self.graphics.update_camera()
